@@ -1,0 +1,80 @@
+\section{Introduction}
+
+Contracts were incorporated into the C++26 draft. However, there are a number of
+concerns that still remain unsolved. We recommend that unless those concerns are
+properly address the proposal in its current form should be removed from the
+C++26 draft.
+
+Here is a summary:
+
+\begin{itemize}
+
+\item \textbf{Constification}: Clause 6.11.1/4 makes any variable to be
+\cppkey{const} within the predicate of a contract assertion. This also applies
+to the \cppkey{this} pointer. This is specially problematic when invoking an
+overloaded function, as the overload resolution mechanism might select a
+different version than in other context.
+
+In addition, clause 9.4.1/7 states that by a using a non-reference parameter of
+a function in a post-condition the parameter magically becomes \cppkey{const}.
+In this case, adding a post-condition to a function is changing the signature of
+the function, which seems counter-intuitive.
+
+This is major concern from the teachability point of view, as it will make the
+code harder to understand. Moreover, this might not be acceptable for projects
+where maintainability and simplicity are major drivers.
+
+
+\item \textbf{No support for function pointers}: Clause 9.4.1/8 states (inside a
+note) that ``\emph{ A pointer to function, pointer to member function, or function
+type alias cannot have a function-contract-specifier-seq associated directly
+with it}''. Pointer to functions are a first class citizen in C++.
+
+\item \textbf{No support for virtual functions}: C++ supports multiple styles of
+programming, including object-oriented programming where virtual functions play
+a major role. However, the contract feature explicitly forbids the use of
+contracts specifiers for virtual functions (cluase 9.4.1/6). This is a major
+drawback of the feature.
+
+There are large codebases written in C++ that make extensive use of virtual
+functions. By providing a solution that does not support one of the major styles
+the language is doing a disservice to such portion of the user community.
+
+
+\item \textbf{Mixed mode builds}: In P3835~\cite{p3835r0} examples are given for
+a header file that contains an \cppkey{inline} function with a contract assertion and is
+used from different translations units with different evaluation semantics. The
+same applies to \cppkey{constexpr} functions, \cppkey{consteval} functions and
+templates.
+
+This a major safety issue as the same assertion might be checked or not
+depending on the caller. Yet subsequent code might depend on the validity of
+that assertion.
+
+\item \textbf{Multiple dependent assertions}: When there are multiple dependent
+assertions (a precondition that checks for null pointer and another precondition
+that dereferences that pointer), the evaluation in non-terminating modes may
+lead to undefined behavior.
+
+This is a safety issue. It may be mitigated by not evaluating dependent contract
+assertions when the first assertion fails.
+
+\item \textbf{Unsafe consequences}: In paper P3829~\cite{p3829r0} examples are
+given on how contract assertions may lead to situations where a critical check
+may end-up elided. As the papers states this might be a powerful tool for new
+supply-chain attacks.
+
+This is another major safety issue. Contracts should not worsen the safety
+dimension of the language.
+
+\item \textbf{Lack of sufficient deployment experience}: The contacts feature is
+a major feature that lacks of enough deployment experience. While it is true
+that some portions have been experimented in projects. There are many features
+that have not been tried sufficiently.
+
+The safest path would be to get more experience by providing the feature either
+in a technical specification or in a white paper, so that all the issues are
+better understood.
+
+
+\end{itemize}
