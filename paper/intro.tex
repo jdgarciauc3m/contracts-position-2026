@@ -9,6 +9,21 @@ Here is a summary:
 
 \begin{itemize}
 
+\item \textbf{Lack of sufficient experience}: The contracts feature is
+a major feature that lacks of enough deployment experience. While it is true
+that some portions have been experimented in projects. There are many features
+that have not been tried sufficiently.
+
+Moreover, at this point we also lack of enough user experience, implementation
+experience and build system experience. The latter is specially significant in
+presence of mixed mode builds. We should also have experience in multiple
+domains. What is acceptable in one problem domain becomes critically
+unacceptable in a different domain.
+
+The safest path would be to get more experience by providing the feature either
+in a technical specification or in a white paper, so that all the issues are
+better understood.
+
 \item \textbf{Constification}: Clause 6.11.1/4 makes any variable to be
 \cppkey{const} within the predicate of a contract assertion. This also applies
 to the \cppkey{this} pointer. This is specially problematic when invoking an
@@ -22,8 +37,9 @@ the function, which seems counter-intuitive.
 
 This is major concern from the teachability point of view, as it will make the
 code harder to understand. Moreover, this might not be acceptable for projects
-where maintainability and simplicity are major drivers.
-
+where maintainability and simplicity are major drivers. It is also worth to
+note that constification violates a fundamental design principle for C++: given
+the same object, the same operation should have the same effect.
 
 \item \textbf{No support for function pointers}: Clause 9.4.1/8 states (inside a
 note) that ``\emph{ A pointer to function, pointer to member function, or function
@@ -66,15 +82,6 @@ supply-chain attacks.
 
 This is another major safety issue. Contracts should not worsen the safety
 dimension of the language.
-
-\item \textbf{Lack of sufficient deployment experience}: The contacts feature is
-a major feature that lacks of enough deployment experience. While it is true
-that some portions have been experimented in projects. There are many features
-that have not been tried sufficiently.
-
-The safest path would be to get more experience by providing the feature either
-in a technical specification or in a white paper, so that all the issues are
-better understood.
 
 
 \end{itemize}
