@@ -1,4 +1,4 @@
-\section{Introduction}
+\section{Presentation}
 
 Contracts were incorporated into the C++26 draft. However, there are a number of
 concerns that still remain unsolved. We recommend that unless those concerns are
@@ -23,39 +23,6 @@ unacceptable in a different domain.
 The safest path would be to get more experience by providing the feature either
 in a technical specification or in a white paper, so that all the issues are
 better understood.
-
-\item \textbf{Constification}: Clause 6.11.1/4 makes any variable to be
-\cppkey{const} within the predicate of a contract assertion. This also applies
-to the \cppkey{this} pointer. This is specially problematic when invoking an
-overloaded function, as the overload resolution mechanism might select a
-different version than in other context.
-
-In addition, clause 9.4.1/7 states that by a using a non-reference parameter of
-a function in a post-condition the parameter magically becomes \cppkey{const}.
-In this case, adding a post-condition to a function is changing the signature of
-the function, which seems counter-intuitive.
-
-This is major concern from the teachability point of view, as it will make the
-code harder to understand. Moreover, this might not be acceptable for projects
-where maintainability and simplicity are major drivers. It is also worth to
-note that constification violates a fundamental design principle for C++: given
-the same object, the same operation should have the same effect.
-
-\item \textbf{No support for function pointers}: Clause 9.4.1/8 states (inside a
-note) that ``\emph{ A pointer to function, pointer to member function, or function
-type alias cannot have a function-contract-specifier-seq associated directly
-with it}''. Pointer to functions are a first class citizen in C++.
-
-\item \textbf{No support for virtual functions}: C++ supports multiple styles of
-programming, including object-oriented programming where virtual functions play
-a major role. However, the contract feature explicitly forbids the use of
-contracts specifiers for virtual functions (cluase 9.4.1/6). This is a major
-drawback of the feature.
-
-There are large codebases written in C++ that make extensive use of virtual
-functions. By providing a solution that does not support one of the major styles
-the language is doing a disservice to such portion of the user community.
-
 
 \item \textbf{Mixed mode builds}: In P3835~\cite{p3835r0} examples are given for
 a header file that contains an \cppkey{inline} function with a contract assertion and is
@@ -82,6 +49,42 @@ supply-chain attacks.
 
 This is another major safety issue. Contracts should not worsen the safety
 dimension of the language.
+
+\item \textbf{Constification}: Clause 6.11.1/4 makes any variable to be
+\cppkey{const} within the predicate of a contract assertion. This also applies
+to the \cppkey{this} pointer. This is specially problematic when invoking an
+overloaded function, as the overload resolution mechanism might select a
+different version than in other context.
+
+In addition, clause 9.4.1/7 states that by a using a non-reference parameter of
+a function in a post-condition the parameter magically becomes \cppkey{const}.
+In this case, adding a post-condition to a function is changing the signature of
+the function, which seems counter-intuitive.
+
+This is major concern from the teachability point of view, as it will make the
+code harder to understand. Moreover, this might not be acceptable for projects
+where maintainability and simplicity are major drivers. It is also worth to
+note that constification violates a fundamental design principle for C++: given
+the same object, the same operation should have the same effect.
+
+\item \textbf{No support for function pointers}: Clause 9.4.1/8 states (inside a
+note) that ``\emph{ A pointer to function, pointer to member function, or function
+type alias cannot have a function-contract-specifier-seq associated directly
+with it}''. Pointer to functions are a first class citizen in C++.
+
+Pointer to functions and pointer to member functions are widely used in many
+code bases. Not supporting contracts on them will be a barrier to adopt
+contracts in those code bases.
+
+\item \textbf{No support for virtual functions}: C++ supports multiple styles of
+programming, including object-oriented programming where virtual functions play
+a major role. However, the contract feature explicitly forbids the use of
+contracts specifiers for virtual functions (cluase 9.4.1/6). This is a major
+drawback of the feature.
+
+There are large codebases written in C++ that make extensive use of virtual
+functions. By providing a solution that does not support one of the major styles
+the language is doing a disservice to such portion of the user community.
 
 
 \end{itemize}
